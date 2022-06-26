@@ -1,7 +1,7 @@
 FROM python:3.10-alpine
 
 ARG TARGETARCH=amd64
-ARG VERSION=4.0.2
+ARG VERSION=4.4.0
 
 ENV EUID=1000 EGID=1000 HOME=/home/vscode
 
