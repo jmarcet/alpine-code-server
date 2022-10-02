@@ -1,7 +1,7 @@
 FROM python:3.10-alpine
 
 ARG TARGETARCH=amd64
-ARG VERSION=4.5.1
+ARG VERSION=4.7.1
 
 ENV EUID=1000 EGID=1000 HOME=/home/vscode
 
@@ -13,7 +13,7 @@ ENV PYTHONUNBUFFERED=1
 
 RUN sed -e 's:alpine\/[.0-9v]\+\/:alpine/edge/:g' -i /etc/apk/repositories
 RUN apk update && apk upgrade --available --prune --purge
-RUN apk --no-cache add build-base go libffi-dev linux-headers make musl-dev sqlite-libs \
+RUN apk --no-cache add build-base go libffi-dev libssl1.1 linux-headers make musl-dev sqlite-libs \
    bash curl docker-compose docker-compose-zsh-completion docker-zsh-completion \
    git gnupg nodejs openssh-client s6 tmux vim wrk zsh
 
@@ -21,9 +21,7 @@ RUN \
    cd /tmp && \
    wget https://github.com/cdr/code-server/releases/download/v$VERSION/code-server-$VERSION-linux-$TARGETARCH.tar.gz && \
    tar xzf code-server-$VERSION-linux-$TARGETARCH.tar.gz && \
-   rm code-server-$VERSION-linux-$TARGETARCH/code-server && \
    rm code-server-$VERSION-linux-$TARGETARCH/lib/node && \
-   rm code-server-$VERSION-linux-$TARGETARCH/node && \
    rm code-server-$VERSION-linux-$TARGETARCH.tar.gz && \
    mv code-server-$VERSION-linux-$TARGETARCH /usr/lib/code-server && \
    sed -i 's/"$ROOT\/lib\/node"/node/g'  /usr/lib/code-server/bin/code-server
